@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TP2</string>
+    <string name="choiceButton">Choisir</string>
+    <string name="action">"Action: "</string>
+    <string name="retourArriere">Retour en arrière</string>
+    <string name="jeu_de_dame">Jeu de Dame</string>
+    <string name="retour">Retour</string>
+    <string name="d_placements_possibles">Déplacements possibles :</string>
+    <string name="textJ1">Veuillez entrer  le nom du joueur 1(Noir):</string>
+    <string name="texteJ2">Veuillez entrer le nom du joueur 2 (Blanc):</string>
+    <string name="Btn_joueur">Jouer</string>
+    <string name="changement_tour">Tour de :</string>
+</resources>
