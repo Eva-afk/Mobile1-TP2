@@ -140,8 +140,21 @@ public class MainActivity extends AppCompatActivity {
         Button button = new Button(this);
         int position = id;
         button.setTag(position);
-        button.setText(String.valueOf(contenu));
-        button.setTextSize(14f);
+        String displayText;
+        if (contenu == 'P') {
+            displayText = "⚫";
+        } else if (contenu == 'p') {
+            displayText = "⚪";
+        } else if (contenu == 'D') {
+            displayText = "♔";
+        } else if (contenu == 'd') {
+            displayText = "♕";
+        } else {
+            displayText = String.valueOf(contenu);
+        }
+
+        button.setText(displayText);
+        button.setTextSize(20f);
 
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(
                 GridLayout.spec(i, 1f),
@@ -287,10 +300,23 @@ public class MainActivity extends AppCompatActivity {
             Pion p = jeuDame.getDamier().getPion(pos);
             if (p == null) {
                 b.setText((String.valueOf("")));
-            } else if (p instanceof Dame) {
-                b.setText((String.valueOf(p.getRepresentation()))); // exemple unicode
             } else {
-                b.setText((String.valueOf(p.getRepresentation())));
+                char representation = p.getRepresentation();
+                String displayText;
+
+                if (representation == 'P') {
+                    displayText = "⚫";
+                } else if (representation == 'p') {
+                    displayText = "⚪";
+                } else if (representation == 'D') {
+                    displayText = "♔";
+                } else if (representation == 'd') {
+                    displayText = "♕";
+                } else {
+                    displayText = String.valueOf(representation);
+                }
+
+                b.setText(displayText);
             }
         }
     }

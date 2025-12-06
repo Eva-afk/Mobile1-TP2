@@ -168,12 +168,21 @@ public class JeuDame {
                 }
             } else if (pion.getCouleur() == Pion.Couleur.NOIR &&
                     Objects.requireNonNull(listeJoueurs.get("noir")).getStatusTour()) {
-                if (Arrays.stream(coloneChangerSix).anyMatch(x -> x == positionPion)) {
-                    deplacementsPossibles.add(positionPion + 5);
-                    deplacementsPossibles.add(positionPion + 6);
+                if (Arrays.stream(coloneChangerSix).anyMatch(x -> x == positionPion)
+                ) {
+                    if (damier.getPion(positionPion + 5) == null) {
+                        deplacementsPossibles.add(positionPion + 5);
+                    }
+                    if (damier.getPion(positionPion + 6) == null) {
+                        deplacementsPossibles.add(positionPion + 6);
+                    }
                 } else {
-                    deplacementsPossibles.add(positionPion + 4);
-                    deplacementsPossibles.add(positionPion + 5);
+                    if (damier.getPion(positionPion + 4) == null) {
+                        deplacementsPossibles.add(positionPion + 4);
+                    }
+                    if (damier.getPion(positionPion + 5) == null) {
+                        deplacementsPossibles.add(positionPion + 5);
+                    }
                 }
             }
         }
