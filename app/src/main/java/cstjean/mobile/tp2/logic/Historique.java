@@ -25,6 +25,11 @@ public class Historique {
         reset();
     }
 
+    /**
+     * Crée ou recoit une instance de l'historique.
+     *
+     * @return l'instance de l'historique.
+     */
     public static Historique getInstance() {
         if (instance == null) {
             instance = new Historique();

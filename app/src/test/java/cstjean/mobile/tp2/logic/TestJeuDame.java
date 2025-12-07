@@ -49,6 +49,21 @@ public class TestJeuDame {
         jeuDame.getDamier().initialiser();
     }
 
+    @Test
+    public void testVerifierChangementDame() {
+        jeuDame.reset();
+        historique.reset();
+        jeuDame.getDamier().initialiserVide();
+
+        jeuDame.getDamier().ajouterPion(50, pionNoir);
+        jeuDame.getDamier().ajouterPion(1, pionBlanc);
+
+        jeuDame.verifierChangementDame(50);
+        jeuDame.verifierChangementDame(1);
+        assertEquals('D', jeuDame.getDamier().getPion(50).getRepresentation());
+        assertEquals('d', jeuDame.getDamier().getPion(1).getRepresentation());
+    }
+
 
     /**
      * Test pour la vérification des limites de déplacements possibles selon la position du pion.

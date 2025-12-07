@@ -3,7 +3,6 @@ package cstjean.mobile.tp2.logic;
 import cstjean.mobile.tp2.logic.joueurs.Joueur;
 import cstjean.mobile.tp2.logic.pions.Dame;
 import cstjean.mobile.tp2.logic.pions.Pion;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -60,6 +59,7 @@ public class JeuDame {
      */
     private JeuDame(Damier damier) {
         this.damier = damier;
+        damier.initialiser();
         listeJoueurs.put("blanc", new Joueur());
         listeJoueurs.put("noir", new Joueur());
         finPartie = false;
@@ -213,8 +213,29 @@ public class JeuDame {
             damier.ajouterPion(positionPion, null);
             damier.ajouterPion(deplacement, pionVoulu);
             ajoutDeplacementHistorique(positionPion, deplacement, "deplacement");
+            verifierChangementDame(deplacement);
             changerTour();
             verifierFinPartie();
+        }
+    }
+
+    /**
+     * Vérifie si un pion doit être changé en dame.
+     *
+     * @param positionPion la position du pion à vérifier.
+     */
+    public void verifierChangementDame(int positionPion) {
+        Pion pion = damier.getPion(positionPion);
+        int[] whiteLimit = {46, 47, 48, 49, 50};
+        int[] blackLimit = {1, 2, 3, 4, 5};
+
+        if (pion.getCouleur() == Pion.Couleur.BLANC &&
+                Arrays.stream(blackLimit).anyMatch(x -> x == positionPion)) {
+            damier.changementDame(positionPion);
+        }
+        if (pion.getCouleur() == Pion.Couleur.NOIR &&
+                Arrays.stream(whiteLimit).anyMatch(x -> x == positionPion)) {
+            damier.changementDame(positionPion);
         }
     }
 
@@ -438,8 +459,9 @@ public class JeuDame {
             damier.ajouterPion(deplacement, pionVoulu);
 
             ajoutDeplacementHistorique(positionPion, deplacement, "prise");
-
+            verifierChangementDame(deplacement);
             changerTour();
+            verifierFinPartie();
         }
     }
 
@@ -486,7 +508,6 @@ public class JeuDame {
             return new int[]{5, 6};
         }
     }
-
 
     /**
      * Méthode pour gérer le changement de tour.
@@ -708,7 +729,7 @@ public class JeuDame {
     /**
      * Vérifie si la partie est terminée :
      * - Un joueur n'a plus de pion
-     * - Un joueur ne peut plus faire aucun déplacement
+     * - Un joueur ne peut plus faire aucun déplacement.
      */
     public void verifierFinPartie() {
         int nbPionsBlanc = 0;
@@ -741,13 +762,13 @@ public class JeuDame {
         }
 
         // Condition 2 : vérifier si un joueur peut encore jouer
-        if (!peutEncoreJouer("blanc")) {
+        if (peutEncoreJouer("blanc")) {
             setFinPartie(true);
             gagnant = "noir";
             System.out.println("Victoire des noirs ! (les blancs ne peuvent plus jouer)");
             return;
         }
-        if (!peutEncoreJouer("noir")) {
+        if (peutEncoreJouer("noir")) {
             setFinPartie(true);
             gagnant = "blanc";
             System.out.println("Victoire des blancs ! (les noirs ne peuvent plus jouer)");
@@ -756,7 +777,10 @@ public class JeuDame {
     }
 
     /**
-     * Vérifie si le joueur peut jouer : au moins un pion avec un déplacement ou une prise possible
+     * Vérifie si le joueur peut jouer : au moins un pion avec un déplacement ou une prise possible.
+     *
+     * @param joueur le joueur qui peut encore jouer.
+     * @return booléen qui permet de rejouer ou non.
      */
     private boolean peutEncoreJouer(String joueur) {
         for (int pos = 1; pos <= 50; pos++) {
@@ -765,17 +789,17 @@ public class JeuDame {
                 // Dame ou pion :
                 if (pion instanceof Dame) {
                     if (!deplacementPossiblesDame(pos).isEmpty()) {
-                        return true;
+                        return false;
                     }
                 } else {
                     if (!deplacementPossiblesPion(pos, pion).isEmpty() ||
                             !prisesPossiblesPion(pos, pion).isEmpty()) {
-                        return true;
+                        return false;
                     }
                 }
             }
         }
-        return false;
+        return true;
     }
 
 }

@@ -14,13 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import cstjean.mobile.tp2.logic.JeuDame;
 import cstjean.mobile.tp2.logic.affichage.Affichage;
 import cstjean.mobile.tp2.logic.joueurs.Joueur;
 import cstjean.mobile.tp2.logic.pions.Dame;
 import cstjean.mobile.tp2.logic.pions.Pion;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -52,16 +50,24 @@ public class MainActivity extends AppCompatActivity {
      */
     private Affichage affichageDamier;
 
-    /** grille qui contient toute les cases du damier. */
+    /**
+     * grille qui contient toute les cases du damier.
+     */
     private GridLayout grilleDamier;
 
-    /** texte qui affiche a qui appertient le tour du jeu.*/
+    /**
+     * texte qui affiche a qui appertient le tour du jeu.
+     */
     private TextView textChangementTour;
 
-    /**texte qui contient le nom de joueur1 entré. */
+    /**
+     * texte qui contient le nom de joueur1 entré.
+     */
     private String Nomjoueur1;
 
-    /**texte qui contient le nom de joueur2 entré. */
+    /**
+     * texte qui contient le nom de joueur2 entré.
+     */
     private String Nomjoueur2;
 
     private final Map<Integer, Button> posToButton = new HashMap<>();
@@ -86,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         Nomjoueur2 = getIntent().getStringExtra("joueur2");
         textChangementTour = findViewById(R.id.changement_tour);
         jeuDame = JeuDame.getInstance();
-        jeuDame.getDamier().initialiser();
         grilleDamier = findViewById(R.id.damier_grid);
         deplacements = findViewById(R.id.deplacements_possibles);
         boutonHistorique = findViewById(R.id.bouton_historique);
@@ -138,14 +143,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button creerBouton(int i, int j, int id, char contenu) {
         Button button = new Button(this);
-        int position = id;
-        button.setTag(position);
+        button.setTag(id);
         String displayText;
         if (contenu == 'P') {
             displayText = "⚫";
         } else if (contenu == 'p') {
             displayText = "⚪";
         } else if (contenu == 'D') {
+            button.setTextColor(Color.BLACK);
             displayText = "♔";
         } else if (contenu == 'd') {
             displayText = "♕";
@@ -173,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             button.setBackgroundColor(Color.parseColor("#8B4513"));
             button.setEnabled(true);
             button.setId(id);
-            posToButton.put(position, button);
+            posToButton.put(id, button);
         }
         button.setOnClickListener(v -> {
             Pion pionActuel;
@@ -187,11 +192,11 @@ public class MainActivity extends AppCompatActivity {
                     String texte = TextUtils.join(", ", liste);
 
                     deplacements.setText(String.format(Locale.getDefault(),
-                                    "deplacement possible pour la dame %d: %s", positionPion, texte));
+                            "deplacement possible pour la dame %d: %s", positionPion, texte));
                 } else {
                     LinkedList<Integer> liste = jeuDame.deplacementPossiblesPion(positionPion, pionActuel);
                     if (!jeuDame.prisesPossiblesPion(positionPion, pionActuel).isEmpty()) {
-                       liste.addAll(jeuDame.prisesPossiblesPion(positionPion, pionActuel));
+                        liste.addAll(jeuDame.prisesPossiblesPion(positionPion, pionActuel));
                     }
                     String texte = TextUtils.join(", ", liste);
 
@@ -206,7 +211,9 @@ public class MainActivity extends AppCompatActivity {
         return button;
     }
 
-    /** methode pour raffraichir l'affichage du damier a chaque interaction. */
+    /**
+     * methode pour raffraichir l'affichage du damier a chaque interaction.
+     */
     private void refreshUi() {
         if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("noir")).getStatusTour()) {
             textChangementTour.setText(String.format(Locale.getDefault(), Nomjoueur2));
@@ -216,7 +223,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCaseClicked(Integer pos) {
-        if (pos == null || pos < 1 || pos > 50) return;
+        if (pos == null || pos < 1 || pos > 50) {
+            return;
+        }
 
         Pion pion = jeuDame.getDamier().getPion(pos);
         Joueur joueurBlanc = jeuDame.getListeJoueurs().get("blanc");
@@ -235,8 +244,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // on combine déplacements simples et prises (selon règles)
                 LinkedList<Integer> prises = jeuDame.prisesPossiblesPion(pos, pion);
-                if (!prises.isEmpty()) currentTargets = prises;
-                else currentTargets = jeuDame.deplacementPossiblesPion(pos, pion);
+                if (!prises.isEmpty()) {
+                    currentTargets = prises;
+                } else {
+                    currentTargets = jeuDame.deplacementPossiblesPion(pos, pion);
+                }
             }
             highlightTargets(currentTargets);
             return;
@@ -276,7 +288,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void executeMove(int from, int to) {
         Pion p = jeuDame.getDamier().getPion(from);
-        if (p == null) return;
+        if (p == null) {
+            return;
+        }
 
         if (jeuDame.verifierDame(from)) {
             jeuDame.deplacementDame(from, to);
@@ -296,7 +310,9 @@ public class MainActivity extends AppCompatActivity {
     private void updateButtonsDamier() {
         for (int pos = 1; pos <= 50; pos++) {
             Button b = posToButton.get(pos);
-            if (b == null) continue;
+            if (b == null) {
+                continue;
+            }
             Pion p = jeuDame.getDamier().getPion(pos);
             if (p == null) {
                 b.setText((String.valueOf("")));
@@ -309,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (representation == 'p') {
                     displayText = "⚪";
                 } else if (representation == 'D') {
+                    b.setTextColor(Color.BLACK);
                     displayText = "♔";
                 } else if (representation == 'd') {
                     displayText = "♕";
@@ -330,11 +347,16 @@ public class MainActivity extends AppCompatActivity {
         textChangementTour.setText(message);
     }
 
-    private void recommencerLaPartie(){
+    private void recommencerLaPartie() {
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-
+        updateButtonsDamier();
+        refreshUi();
+    }
 
 
 }
