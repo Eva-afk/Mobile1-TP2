@@ -762,30 +762,4 @@ public class JeuDame {
         }
     }
 
-    /**
-     * Vérifie si le joueur peut jouer : au moins un pion avec un déplacement ou une prise possible.
-     *
-     * @param joueur le joueur qui peut encore jouer.
-     * @return booléen qui permet de rejouer ou non.
-     */
-    private boolean peutEncoreJouer(String joueur) {
-        for (int pos = 1; pos <= 50; pos++) {
-            Pion pion = damier.getPion(pos);
-            if (pion != null && pion.getCouleur().name().equalsIgnoreCase(joueur)) {
-                // Dame ou pion :
-                if (pion instanceof Dame) {
-                    if (!deplacementPossiblesDame(pos).isEmpty()) {
-                        return false;
-                    }
-                } else {
-                    if (!deplacementPossiblesPion(pos, pion).isEmpty() ||
-                            !prisesPossiblesPion(pos, pion).isEmpty()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
 }

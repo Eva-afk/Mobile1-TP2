@@ -35,7 +35,11 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.androidx.uiautomator
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    androidTestImplementation libs.core
+    androidTestImplementation libs.rules
+    androidTestImplementation libs.androidx.espresso.core
 }
