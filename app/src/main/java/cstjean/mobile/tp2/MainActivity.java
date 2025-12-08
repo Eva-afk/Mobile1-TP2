@@ -9,16 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import cstjean.mobile.tp2.logic.Historique;
 import cstjean.mobile.tp2.logic.JeuDame;
 import cstjean.mobile.tp2.logic.affichage.Affichage;
 import cstjean.mobile.tp2.logic.joueurs.Joueur;
 import cstjean.mobile.tp2.logic.pions.Dame;
 import cstjean.mobile.tp2.logic.pions.Pion;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -34,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
      * Gestionnaire des actions pour le jeu de dames.
      */
     private JeuDame jeuDame;
+
+    /**
+     * Historique des actions.
+     */
+    private Historique historique = Historique.getInstance();
 
     /**
      * Texte pour les déplacements.
@@ -63,19 +72,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * texte qui contient le nom de joueur1 entré.
      */
-    private String Nomjoueur1;
+    private String nomjoueur1;
 
     /**
      * texte qui contient le nom de joueur2 entré.
      */
-    private String Nomjoueur2;
+    private String nomjoueur2;
 
     private final Map<Integer, Button> posToButton = new HashMap<>();
     private int selectedPosition = -1;
     private LinkedList<Integer> currentTargets = new LinkedList<>();
-
-    public static final String EXTRA_JEU_DAME = "jeuDame";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Nomjoueur1 = getIntent().getStringExtra("joueur1");
-        Nomjoueur2 = getIntent().getStringExtra("joueur2");
+        nomjoueur1 = getIntent().getStringExtra("joueur1");
+        nomjoueur2 = getIntent().getStringExtra("joueur2");
         textChangementTour = findViewById(R.id.changement_tour);
         jeuDame = JeuDame.getInstance();
         grilleDamier = findViewById(R.id.damier_grid);
@@ -153,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             button.setTextColor(Color.BLACK);
             displayText = "♔";
         } else if (contenu == 'd') {
+            button.setTextColor(Color.WHITE);
             displayText = "♕";
         } else {
             displayText = String.valueOf(contenu);
@@ -216,9 +223,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void refreshUi() {
         if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("noir")).getStatusTour()) {
-            textChangementTour.setText(String.format(Locale.getDefault(), Nomjoueur2));
+            textChangementTour.setText(String.format(Locale.getDefault(), nomjoueur2));
         } else if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("blanc")).getStatusTour()) {
-            textChangementTour.setText(String.format(Locale.getDefault(), Nomjoueur1));
+            textChangementTour.setText(String.format(Locale.getDefault(), nomjoueur1));
         }
     }
 
@@ -304,7 +311,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         updateButtonsDamier();
-
+        jeuDame.verifierFinPartie();
+        if (jeuDame.getGagnant() != null) {
+            afficherFinDePartie();
+        }
     }
 
     private void updateButtonsDamier() {
@@ -328,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
                     b.setTextColor(Color.BLACK);
                     displayText = "♔";
                 } else if (representation == 'd') {
+                    b.setTextColor(Color.WHITE);
                     displayText = "♕";
                 } else {
                     displayText = String.valueOf(representation);
@@ -345,11 +356,32 @@ public class MainActivity extends AppCompatActivity {
                 "Victoire du joueur " + gagnant + " 🎉";
 
         textChangementTour.setText(message);
+        boutonHistorique.setText(R.string.recommencer);
+        boutonHistorique.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recommencerLaPartie();
+            }
+        });
     }
 
     private void recommencerLaPartie() {
-
+        jeuDame.reset();
+        historique.reset();
+        refreshUi();
+        updateButtonsDamier();
+        boutonHistorique.setText(R.string.retour);
+        boutonHistorique.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HistoriqueActivity.class);
+                startActivity(intent);
+            }
+        });
+        Intent intent = new Intent(MainActivity.this, AccueilActivity.class);
+        startActivity(intent);
     }
+
     @Override
     protected void onResume() {
         super.onResume();

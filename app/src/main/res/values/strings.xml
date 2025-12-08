@@ -10,4 +10,5 @@
     <string name="texteJ2">Veuillez entrer le nom du joueur 2 (Blanc):</string>
     <string name="Btn_joueur">Jouer</string>
     <string name="changement_tour">Tour de :</string>
+    <string name="recommencer">Recommencer</string>
 </resources>

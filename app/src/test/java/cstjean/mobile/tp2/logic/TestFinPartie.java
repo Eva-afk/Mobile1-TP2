@@ -1,12 +1,13 @@
 package cstjean.mobile.tp2.logic;
 
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Objects;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import cstjean.mobile.tp2.logic.pions.Pion;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test de la fin de partie.
@@ -24,8 +25,9 @@ public class TestFinPartie {
         jeu = JeuDame.getInstance();
         jeu.reset();
     }
+
     /**
-     * Si aucun pion blanc, noir gagne
+     * Si aucun pion blanc, noir gagne.
      */
     @Test
     public void testFinPartieBlancPlusDePions() {
@@ -39,7 +41,7 @@ public class TestFinPartie {
     }
 
     /**
-     * Si aucun pion noir,  blanc gagne
+     * Si aucun pion noir,  blanc gagne.
      */
     @Test
     public void testFinPartieNoirPlusDePions() {
@@ -53,7 +55,7 @@ public class TestFinPartie {
     }
 
     /**
-     * joueur blanc ne peut plus jouer, noir gagne
+     * joueur blanc ne peut plus jouer, noir gagne.
      */
     @Test
     public void testFinPartieBlancBloque() {
@@ -67,7 +69,7 @@ public class TestFinPartie {
     }
 
     /**
-     * joueur noir ne peut plus jouer → blanc gagne
+     * joueur noir ne peut plus jouer → blanc gagne.
      */
     @Test
     public void testFinPartieNoirBloque() {
@@ -81,15 +83,12 @@ public class TestFinPartie {
     }
 
     /**
-     * Pas de fin de partie si les deux joueurs peuvent jouer
+     * Pas de fin de partie si les deux joueurs peuvent jouer.
      */
     @Test
     public void testPartieContinue() {
         jeu.reset();
         jeu.getDamier().initialiser();
-
-        Objects.requireNonNull(jeu.getListeJoueurs().get("blanc")).setStatusTour(true);
-        Objects.requireNonNull(jeu.getListeJoueurs().get("noir")).setStatusTour(true);
 
         jeu.verifierFinPartie();
 

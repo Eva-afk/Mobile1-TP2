@@ -760,20 +760,6 @@ public class JeuDame {
             System.out.println("Victoire des blancs !");
             return;
         }
-
-        // Condition 2 : vérifier si un joueur peut encore jouer
-        if (peutEncoreJouer("blanc")) {
-            setFinPartie(true);
-            gagnant = "noir";
-            System.out.println("Victoire des noirs ! (les blancs ne peuvent plus jouer)");
-            return;
-        }
-        if (peutEncoreJouer("noir")) {
-            setFinPartie(true);
-            gagnant = "blanc";
-            System.out.println("Victoire des blancs ! (les noirs ne peuvent plus jouer)");
-            return;
-        }
     }
 
     /**
