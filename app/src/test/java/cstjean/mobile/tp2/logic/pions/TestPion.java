@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-
 /**
  * Classe de test unitaire pour la classe Pion.
  * Vérifie la création et la couleur par défaut d’un pion.
@@ -13,7 +12,6 @@ import org.junit.Test;
  * @author Eva Beaulieu
  * @author Chloé Nguedia
  */
-
 public class TestPion {
 
     /**

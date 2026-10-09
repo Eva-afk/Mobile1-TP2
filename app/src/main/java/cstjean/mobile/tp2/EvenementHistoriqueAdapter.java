@@ -8,12 +8,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import cstjean.mobile.tp2.logic.Historique;
 
+/**
+ * Adapter pour afficher l'historique des événements dans une RecyclerView.
+ * Utilise un singleton pour récupérer les données.
+ */
 public class EvenementHistoriqueAdapter extends RecyclerView.Adapter<EvenementHistoriqueViewHolder> {
 
+    /**
+     * Singleton contenant les données de l'historique.
+     */
     private final Historique historique = Historique.getInstance();
 
     /**
      * Constructeur de l'adapter.
+     * Initialise l'adapter sans paramètres supplémentaires.
      */
     public EvenementHistoriqueAdapter() {
     }
@@ -21,9 +29,9 @@ public class EvenementHistoriqueAdapter extends RecyclerView.Adapter<EvenementHi
     /**
      * Crée et retourne un ViewHolder pour un item de la liste.
      *
-     * @param parent la vue parente
-     * @param viewType le type de vue
-     * @return un nouveau CoursSessionViewHolder
+     * @param parent   la vue parente dans laquelle l'élément sera affiché
+     * @param viewType le type de vue (non utilisé ici)
+     * @return un nouveau EvenementHistoriqueViewHolder
      */
     @NonNull
     @Override
@@ -34,42 +42,42 @@ public class EvenementHistoriqueAdapter extends RecyclerView.Adapter<EvenementHi
     }
 
     /**
-     * Lie les données du singleton au ViewHolder à la position donnée.
+     * Lie les données de l'historique au ViewHolder à la position donnée.
      *
-     * @param holder le ViewHolder à lier
-     * @param position la position de l'élément
+     * @param holder   le ViewHolder à lier
+     * @param position la position de l'élément dans la liste
      */
     @Override
     public void onBindViewHolder(@NonNull EvenementHistoriqueViewHolder holder, int position) {
-        holder.bindEvenementHistorique(historique.getListeHistorique().get(position), position);
+        holder.bindEvenementHistorique(historique.getListeHistorique().get(position));
     }
 
     /**
-     * Retourne le nombre d'éléments à afficher à l'aide du singleton.
+     * Retourne le nombre total d'éléments dans l'historique.
      *
-     * @return le nombre d'éléments
+     * @return le nombre d'éléments dans la liste de l'historique
      */
     @Override
     public int getItemCount() {
-         return historique.getListeHistorique().size();
+        return historique.getListeHistorique().size();
     }
 }
 
 /**
- * ViewHolder pour un élément représentant un cours.
- * Gère le clic pour démarrer l'activity de détails à l'aide de l'index courant.
+ * ViewHolder pour un élément de l'historique des événements.
+ * Permet de gérer l'affichage et les interactions pour un élément spécifique.
  */
 class EvenementHistoriqueViewHolder extends RecyclerView.ViewHolder {
-    /** Vue TextView pour le département du cours. */
+    /**
+     * Vue TextView pour afficher l'action associée à l'événement.
+     */
     private final TextView action;
-
-    /** Index courant de l'élément dans la liste. */
-    private int indexCourant;
 
     /**
      * Constructeur du ViewHolder.
+     * Initialise les composants de l'interface utilisateur pour un élément.
      *
-     * @param itemView l'interface de l'élément de la liste
+     * @param itemView la vue représentant un élément de la liste
      */
     public EvenementHistoriqueViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -77,13 +85,11 @@ class EvenementHistoriqueViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * Remplit les vues avec les informations de la session et mémorise l'index.
+     * Remplit les vues avec les informations de l'événement historique et mémorise l'index.
      *
-     * @param evenementHistorique la session à afficher
-     * @param position la position dans la liste
+     * @param evenementHistorique l'événement historique à afficher
      */
-    void bindEvenementHistorique(String evenementHistorique, int position) {
+    void bindEvenementHistorique(String evenementHistorique) {
         action.setText(evenementHistorique);
-        indexCourant = position;
     }
 }

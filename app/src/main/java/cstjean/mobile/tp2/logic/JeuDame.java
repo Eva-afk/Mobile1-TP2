@@ -758,7 +758,6 @@ public class JeuDame {
             setFinPartie(true);
             gagnant = "blanc";
             System.out.println("Victoire des blancs !");
-            return;
         }
     }
 

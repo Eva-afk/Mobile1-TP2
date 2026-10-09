@@ -9,20 +9,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import cstjean.mobile.tp2.logic.Historique;
 import cstjean.mobile.tp2.logic.JeuDame;
 import cstjean.mobile.tp2.logic.affichage.Affichage;
 import cstjean.mobile.tp2.logic.joueurs.Joueur;
 import cstjean.mobile.tp2.logic.pions.Dame;
 import cstjean.mobile.tp2.logic.pions.Pion;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Historique des actions.
      */
-    private Historique historique = Historique.getInstance();
+    private final Historique historique = Historique.getInstance();
 
     /**
      * Texte pour les déplacements.
@@ -53,16 +50,6 @@ public class MainActivity extends AppCompatActivity {
      * Bouton pour un retour en arrière.
      */
     private Button boutonHistorique;
-
-    /**
-     * Affichage des éléments sur le damier.
-     */
-    private Affichage affichageDamier;
-
-    /**
-     * grille qui contient toute les cases du damier.
-     */
-    private GridLayout grilleDamier;
 
     /**
      * texte qui affiche a qui appertient le tour du jeu.
@@ -79,8 +66,19 @@ public class MainActivity extends AppCompatActivity {
      */
     private String nomjoueur2;
 
+    /**
+     * position du bouton.
+     */
     private final Map<Integer, Button> posToButton = new HashMap<>();
+
+    /**
+     * position sélectionnée.
+     */
     private int selectedPosition = -1;
+
+    /**
+     * élément choisi.
+     */
     private LinkedList<Integer> currentTargets = new LinkedList<>();
 
     @Override
@@ -98,18 +96,15 @@ public class MainActivity extends AppCompatActivity {
         nomjoueur2 = getIntent().getStringExtra("joueur2");
         textChangementTour = findViewById(R.id.changement_tour);
         jeuDame = JeuDame.getInstance();
-        grilleDamier = findViewById(R.id.damier_grid);
+
         deplacements = findViewById(R.id.deplacements_possibles);
         boutonHistorique = findViewById(R.id.bouton_historique);
-        affichageDamier = new Affichage(jeuDame.getDamier());
-        jeuDame.getDamier().ajouterPion(50, new Dame());
 
-        boutonHistorique.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HistoriqueActivity.class);
-                startActivity(intent);
-            }
+        Affichage affichageDamier = new Affichage(jeuDame.getDamier());
+
+        boutonHistorique.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HistoriqueActivity.class);
+            startActivity(intent);
         });
 
         String stringdamier = affichageDamier.getAffichageFinal().replaceAll("\\s+", "");
@@ -133,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("DamierLigne", "Ligne " + i + ": " + ligne);
         }
 
+        GridLayout grilleDamier = findViewById(R.id.damier_grid);
         int ids = 0;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -222,9 +218,9 @@ public class MainActivity extends AppCompatActivity {
      * methode pour raffraichir l'affichage du damier a chaque interaction.
      */
     private void refreshUi() {
-        if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("noir")).getStatusTour()) {
+        if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("blanc")).getStatusTour()) {
             textChangementTour.setText(String.format(Locale.getDefault(), nomjoueur2));
-        } else if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("blanc")).getStatusTour()) {
+        } else if (Objects.requireNonNull(jeuDame.getListeJoueurs().get("noir")).getStatusTour()) {
             textChangementTour.setText(String.format(Locale.getDefault(), nomjoueur1));
         }
     }
@@ -315,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         if (jeuDame.getGagnant() != null) {
             afficherFinDePartie();
         }
+        refreshUi();
     }
 
     private void updateButtonsDamier() {
@@ -325,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
             }
             Pion p = jeuDame.getDamier().getPion(pos);
             if (p == null) {
-                b.setText((String.valueOf("")));
+                b.setText((""));
             } else {
                 char representation = p.getRepresentation();
                 String displayText;
@@ -357,12 +354,7 @@ public class MainActivity extends AppCompatActivity {
 
         textChangementTour.setText(message);
         boutonHistorique.setText(R.string.recommencer);
-        boutonHistorique.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recommencerLaPartie();
-            }
-        });
+        boutonHistorique.setOnClickListener(v -> recommencerLaPartie());
     }
 
     private void recommencerLaPartie() {
@@ -371,12 +363,9 @@ public class MainActivity extends AppCompatActivity {
         refreshUi();
         updateButtonsDamier();
         boutonHistorique.setText(R.string.retour);
-        boutonHistorique.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HistoriqueActivity.class);
-                startActivity(intent);
-            }
+        boutonHistorique.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HistoriqueActivity.class);
+            startActivity(intent);
         });
         Intent intent = new Intent(MainActivity.this, AccueilActivity.class);
         startActivity(intent);
@@ -389,6 +378,4 @@ public class MainActivity extends AppCompatActivity {
         updateButtonsDamier();
         refreshUi();
     }
-
-
 }

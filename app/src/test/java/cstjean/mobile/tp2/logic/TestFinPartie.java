@@ -18,8 +18,15 @@ import org.junit.Test;
 
 public class TestFinPartie {
 
+    /**
+     * Jeu dame qui gère les actions.
+     */
     private JeuDame jeu;
 
+
+    /**
+     * Before des tests.
+     */
     @Before
     public void setUp() {
         jeu = JeuDame.getInstance();

@@ -1,7 +1,6 @@
 package cstjean.mobile.tp2.logic.affichage;
 
 import cstjean.mobile.tp2.logic.Damier;
-
 import junit.framework.TestCase;
 
 /**

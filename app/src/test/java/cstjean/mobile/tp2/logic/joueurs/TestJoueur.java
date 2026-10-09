@@ -16,6 +16,9 @@ public class TestJoueur extends TestCase {
         assertTrue(joueur.getStatusTour());
     }
 
+    /**
+     * Test pour setter un nom.
+     */
     public void testSetNom() {
         Joueur joueur = new Joueur();
         joueur.setNom("Gwen");

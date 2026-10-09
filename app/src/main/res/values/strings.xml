@@ -11,4 +11,6 @@
     <string name="Btn_joueur">Jouer</string>
     <string name="changement_tour">Tour de :</string>
     <string name="recommencer">Recommencer</string>
+    <string name="nom_joueur_1">Nom joueur 1</string>
+    <string name="nom_joueur_2">Nom joueur 2</string>
 </resources>

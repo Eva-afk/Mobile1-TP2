@@ -7,6 +7,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Activity pour l'historique.
+ */
 public class HistoriqueActivity extends AppCompatActivity {
 
     @Override
